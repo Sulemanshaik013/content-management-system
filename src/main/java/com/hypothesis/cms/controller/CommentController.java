@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hypothesis.cms.dto.CommentDto;
+import com.hypothesis.cms.model.Comment;
 import com.hypothesis.cms.service.ICommentService;
 
 @RestController
@@ -26,32 +27,32 @@ public class CommentController {
 	}
 
 	@PostMapping()
-	public CommentDto createComment(@RequestBody CommentDto commentDto) {
+	public Comment createComment(@RequestBody CommentDto commentDto) {
 		return commentService.createComment(commentDto);
 	}
 
 	@PutMapping("/{commentId}")
-	public CommentDto updateComment(@RequestBody CommentDto commentDto, Long commentId) {
+	public Comment updateComment(@RequestBody CommentDto commentDto, Long commentId) {
 		return commentService.updateComment(commentDto, commentId);
 	}
 
 	@DeleteMapping("/{commentId}")
-	public CommentDto deleteComment(Long commentId) {
+	public Comment deleteComment(Long commentId) {
 		return commentService.deleteCommentByID(commentId);
 	}
 
 	@GetMapping("/{commentId}")
-	public CommentDto getCommentById(Long commentId) {
+	public Comment getCommentById(Long commentId) {
 		return commentService.getCommentById(commentId);
 	}
 
 	@GetMapping()
-	public List<CommentDto> getAllComments() {
+	public List<Comment> getAllComments() {
 		return commentService.getAllComments();
 	}
 
 	@GetMapping("/article/{articleId}")
-	public List<CommentDto> getCommentsByArticle(Long articleId) {
+	public List<Comment> getCommentsByArticle(Long articleId) {
 		return commentService.getCommentsByArticle(articleId);
 	}
 

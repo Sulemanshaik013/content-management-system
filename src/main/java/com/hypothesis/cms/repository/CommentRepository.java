@@ -9,7 +9,7 @@ import com.hypothesis.cms.model.Comment;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-	
-	List<Comment> findAllCommentSbyArticleId(long articleId);
+
+	List<Comment> findByArticleId(long articleId);
 
 }

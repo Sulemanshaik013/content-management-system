@@ -3,19 +3,20 @@ package com.hypothesis.cms.service;
 import java.util.List;
 
 import com.hypothesis.cms.dto.CommentDto;
+import com.hypothesis.cms.model.Comment;
 
 public interface ICommentService {
 
-	CommentDto createComment(CommentDto commentDto);
+	Comment createComment(CommentDto commentDto);
 
-	CommentDto updateComment(CommentDto commentDto, Long commentId);
+	Comment updateComment(CommentDto commentDto, Long commentId);
 
-	CommentDto deleteCommentByID(Long commentId);
+	Comment deleteCommentByID(Long commentId);
 
-	CommentDto getCommentById(Long commentId);
+	Comment getCommentById(Long commentId);
 
-	List<CommentDto> getAllComments();
+	List<Comment> getAllComments();
 
-	List<CommentDto> getCommentsByArticle(Long articleId);
+	List<Comment> getCommentsByArticle(Long articleId);
 
 }

@@ -20,8 +20,7 @@ public class Comment {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "comment_id")
-    private Long commentId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", nullable = false)
@@ -37,12 +36,12 @@ public class Comment {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
-	public Long getCommentId() {
-		return commentId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCommentId(Long commentId) {
-		this.commentId = commentId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Article getArticle() {
