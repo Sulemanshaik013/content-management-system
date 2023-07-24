@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hypothesis.cms.dto.UserDto;
+import com.hypothesis.cms.model.User;
 import com.hypothesis.cms.service.IUserService;
 
 @RestController
@@ -28,7 +29,7 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public UserDto registerUser(@RequestBody UserDto userDto) {
+	public User registerUser(@RequestBody UserDto userDto) {
 		return userService.registerUser(userDto);
 	}
 
@@ -37,29 +38,29 @@ public class UserController {
 		return userService.loginUser(userName, password);
 	}
 
-	@PutMapping("/update")
-	public UserDto updateUserProfile(@RequestBody UserDto userDto, @RequestParam Long userId) {
-		return userService.updateUserProfile(userDto, userId);
+	@PutMapping("/update/{userId}")
+	public User updateUserProfile(@RequestBody UserDto userDto, String userId) {
+		return userService.updateUserProfile(userDto, Long.parseLong(userId));
 	}
 
-	@PatchMapping("/update")
-	public UserDto changeUserPassword(@RequestParam String password, @RequestParam Long userId) {
+	@PatchMapping("/update/{userId}")
+	public User changeUserPassword(@RequestParam String password, Long userId) {
 		return userService.changeUserPassword(password, userId);
 	}
 
-	@GetMapping("/read")
-	public UserDto getUserByID(@RequestParam Long userId) {
-		return userService.getUserByID(userId);
+	@GetMapping("/read/{userId}")
+	public User getUserById(Long userId) {
+		return userService.getUserById(userId);
 	}
 
 	@GetMapping("/read")
-	public List<UserDto> getAllUsers() {
+	public List<User> getAllUsers() {
 		return userService.getAllUsers();
 	}
 
-	@DeleteMapping("/delete")
-	public UserDto deleteUser(@RequestParam Long userId) {
-		return userService.deleteUserByID(userId);
+	@DeleteMapping("/delete/{userId}")
+	public User deleteUser(Long userId) {
+		return userService.deleteUserById(userId);
 	}
 
 }

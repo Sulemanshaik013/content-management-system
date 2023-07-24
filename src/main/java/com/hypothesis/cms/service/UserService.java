@@ -3,12 +3,11 @@ package com.hypothesis.cms.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hypothesis.cms.dto.UserDto;
+import com.hypothesis.cms.exception.CustomException;
 import com.hypothesis.cms.model.User;
 import com.hypothesis.cms.repository.UserRepository;
 
@@ -18,60 +17,57 @@ public class UserService implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
-	private ModelMapper mapper;
-
 	@Override
-	public UserDto registerUser(UserDto userDto) {
+	public User registerUser(UserDto userDto) {
 		User user = new User();
 		user.setUsername(userDto.getUserName());
 		user.setEmail(userDto.getEmail());
 		user.setPassword(userDto.getPassword());
-		return mapper.map(userRepository.save(user), UserDto.class);
+		return userRepository.save(user);
 	}
 
 	@Override
-	public UserDto updateUserProfile(UserDto userDto, Long userId) {
-		Optional<User> user = userRepository.findById(userId);
-		if (user.isPresent()) {
-			user.get().setUsername(userDto.getUserName());
-			user.get().setEmail(userDto.getEmail());
+	public User updateUserProfile(UserDto userDto, Long userId) {
+		if (!userRepository.existsById(userId)) {
+			throw new CustomException("there is no such user with Id: "+userId);
 		}
-		return mapper.map(userRepository.save(user.get()), UserDto.class);
-	}
-
-	@Override
-	public UserDto deleteUserByID(Long userId) {
 		Optional<User> user = userRepository.findById(userId);
-		if (user.isPresent()) {
-			userRepository.deleteById(userId);
-			return mapper.map(user.get(), UserDto.class);
+		user.get().setUsername(userDto.getUserName());
+		user.get().setEmail(userDto.getEmail());
+		return userRepository.save(user.get());
+	}
+
+	@Override
+	public User deleteUserById(Long userId) {
+		if (! userRepository.existsById(userId)) {
+			throw new CustomException("there is no such user with Id: "+userId);
 		}
-		return mapper.map(userRepository.save(user.get()), UserDto.class);
-	}
-
-	@Override
-	public List<UserDto> getAllUsers() {
-		return mapper.map(userRepository.findAll(), new TypeToken<List<UserDto>>() {
-		}.getType());
-	}
-
-	@Override
-	public UserDto getUserByID(Long userId) {
 		Optional<User> user = userRepository.findById(userId);
-		if (user.isPresent()) {
-			return mapper.map(userRepository.findById(userId), UserDto.class);
-		}
-		return null;
+		userRepository.deleteById(userId);
+		return user.get();
 	}
 
 	@Override
-	public UserDto changeUserPassword(String password, Long userId) {
-		Optional<User> user = userRepository.findById(userId);
-		if (user.isPresent()) {
-			user.get().setPassword(password);
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public User getUserById(Long userId) {
+		if (! userRepository.existsById(userId)) {
+			throw new CustomException("there is no such user with Id: "+userId);
 		}
-		return mapper.map(userRepository.save(user.get()), UserDto.class);
+		return userRepository.findById(userId).get();
+	}
+
+	@Override
+	public User changeUserPassword(String password, Long userId) {
+		if (!userRepository.existsById(userId)) {
+			throw new CustomException("there is no such user with Id: "+userId);
+		}
+		Optional<User> user = userRepository.findById(userId);
+		user.get().setPassword(password);
+		return userRepository.save(user.get());
 	}
 
 	@Override
