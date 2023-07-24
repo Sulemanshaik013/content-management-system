@@ -24,8 +24,7 @@ public class Article {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "article_id")
-    private Long articleId;
+    private Long id;
 
 	@Column(nullable = false)
     private String title;
@@ -47,12 +46,12 @@ public class Article {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-	public Long getArticleId() {
-		return articleId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setArticleId(Long articleId) {
-		this.articleId = articleId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

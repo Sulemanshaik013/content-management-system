@@ -3,29 +3,30 @@ package com.hypothesis.cms.service;
 import java.util.List;
 
 import com.hypothesis.cms.dto.ArticleDto;
+import com.hypothesis.cms.model.Article;
 
 public interface IArticleService {
 
-	ArticleDto createArticle(ArticleDto articleDto);
+	Article createArticle(ArticleDto articleDto);
 
-	ArticleDto updateArticle(ArticleDto articleDto, Long articleId);
+	Article updateArticle(ArticleDto articleDto, Long articleId);
 
-	ArticleDto deleteArticleByID(Long articleId);
+	Article deleteArticleByID(Long articleId);
 
-	ArticleDto getArticleByID(Long articleId);
+	Article getArticleByID(Long articleId);
 
-	List<ArticleDto> getAllArticles();
+	List<Article> getAllArticles();
 
 	void publishArticle(Long articleId);
 
 	void unpublishArticle(Long articleId);
 
-	List<ArticleDto> getPublishedArticle();
+	List<Article> getPublishedArticle();
 
-	List<ArticleDto> getdratedArticle();
+	List<Article> getdratedArticle();
 
-	List<ArticleDto> getArticlesByCategory(Long categoryId);
+	List<Article> getArticlesByCategory(Long categoryId);
 
-	List<ArticleDto> searchArticlesByKeyword(String keyword);
+	List<Article> searchArticlesByKeyword(String keyword);
 
 }

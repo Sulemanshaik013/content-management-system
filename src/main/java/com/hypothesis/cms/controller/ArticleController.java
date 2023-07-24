@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hypothesis.cms.dto.ArticleDto;
+import com.hypothesis.cms.model.Article;
 import com.hypothesis.cms.service.IArticleService;
 
 @RestController
@@ -27,27 +28,27 @@ public class ArticleController {
 	}
 
 	@PostMapping()
-	public ArticleDto createArticle(@RequestBody ArticleDto article) {
+	public Article createArticle(@RequestBody ArticleDto article) {
 		return articleService.createArticle(article);
 	}
 
 	@PutMapping("/{articleId}")
-	public ArticleDto updateArticle(@RequestBody ArticleDto article, Long articleId) {
+	public Article updateArticle(@RequestBody ArticleDto article, Long articleId) {
 		return articleService.updateArticle(article, articleId);
 	}
 
 	@DeleteMapping("/{articleId}")
-	public ArticleDto deleteArticle(Long articleId) {
+	public Article deleteArticle(Long articleId) {
 		return articleService.deleteArticleByID(articleId);
 	}
 
 	@GetMapping("/{articleId}")
-	public ArticleDto getArticle(Long articleId) {
+	public Article getArticle(Long articleId) {
 		return articleService.getArticleByID(articleId);
 	}
 
 	@GetMapping()
-	public List<ArticleDto> getAllArticles() {
+	public List<Article> getAllArticles() {
 		return articleService.getAllArticles();
 	}
 
@@ -62,22 +63,22 @@ public class ArticleController {
 	}
 
 	@GetMapping("/{articleId}/published")
-	public List<ArticleDto> getPublishedArticles() {
+	public List<Article> getPublishedArticles() {
 		return articleService.getPublishedArticle();
 	}
 
 	@GetMapping("/{articleId}/drafts")
-	public List<ArticleDto> getdratedArticle() {
+	public List<Article> getdratedArticle() {
 		return articleService.getdratedArticle();
 	}
 
 	@GetMapping("/category/{categoryId}")
-	public List<ArticleDto> getArticlesByCategory(Long categoryId) {
+	public List<Article> getArticlesByCategory(Long categoryId) {
 		return articleService.getArticlesByCategory(categoryId);
 	}
 
 	@GetMapping("/search")
-	public List<ArticleDto> searchArticleByKeyword(@RequestParam String keyword) {
+	public List<Article> searchArticleByKeyword(@RequestParam String keyword) {
 		return articleService.searchArticlesByKeyword(keyword);
 	}
 

@@ -6,7 +6,6 @@ public class ArticleDto {
 	private String content;
 	private String author;
 	private long categoryid;
-	private String status;
 	
 	public String getTitle() {
 		return title;
@@ -31,12 +30,6 @@ public class ArticleDto {
 	}
 	public void setCategoryid(long categoryid) {
 		this.categoryid = categoryid;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 }
