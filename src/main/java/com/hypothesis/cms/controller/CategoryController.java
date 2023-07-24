@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hypothesis.cms.dto.CategoryDto;
+import com.hypothesis.cms.model.Category;
 import com.hypothesis.cms.service.ICategoryService;
 
 @RestController
@@ -26,27 +27,27 @@ public class CategoryController {
 	}
 
 	@PostMapping()
-	public CategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
+	public Category createCategory(@RequestBody CategoryDto categoryDto) {
 		return categoryService.createCategory(categoryDto);
 	}
 
 	@PutMapping("/{categoryId}")
-	public CategoryDto updateCategory(@RequestBody CategoryDto categoryDto, Long categoryId) {
+	public Category updateCategory(@RequestBody CategoryDto categoryDto, Long categoryId) {
 		return categoryService.updateCategory(categoryDto, categoryId);
 	}
 
 	@DeleteMapping("/{categoryId}")
-	public CategoryDto deleteCategory(Long categoryId) {
+	public Category deleteCategory(Long categoryId) {
 		return categoryService.deleteCategoryByID(categoryId);
 	}
 
 	@GetMapping("/{categoryId}")
-	public CategoryDto getCategoryById(Long categoryId) {
+	public Category getCategoryById(Long categoryId) {
 		return categoryService.getCategoryById(categoryId);
 	}
 
 	@GetMapping()
-	public List<CategoryDto> getAllCategories() {
+	public List<Category> getAllCategories() {
 		return categoryService.getAllCategories();
 	}
 

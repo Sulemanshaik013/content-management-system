@@ -3,17 +3,18 @@ package com.hypothesis.cms.service;
 import java.util.List;
 
 import com.hypothesis.cms.dto.CategoryDto;
+import com.hypothesis.cms.model.Category;
 
 public interface ICategoryService {
 
-	CategoryDto createCategory(CategoryDto categoryDto);
+	Category createCategory(CategoryDto categoryDto);
 
-	CategoryDto updateCategory(CategoryDto categoryDto, Long categoryId);
+	Category updateCategory(CategoryDto categoryDto, Long categoryId);
 
-	CategoryDto deleteCategoryByID(Long categoryId);
+	Category deleteCategoryByID(Long categoryId);
 
-	CategoryDto getCategoryById(Long categoryId);
+	Category getCategoryById(Long categoryId);
 
-	List<CategoryDto> getAllCategories();
+	List<Category> getAllCategories();
 
 }
