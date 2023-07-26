@@ -20,8 +20,8 @@ public class UserService implements IUserService {
 	@Override
 	public User registerUser(UserDto userDto) {
 		User user = new User();
+		user.setName(userDto.getName());
 		user.setUsername(userDto.getUserName());
-		user.setEmail(userDto.getEmail());
 		user.setPassword(userDto.getPassword());
 		return userRepository.save(user);
 	}
@@ -29,18 +29,18 @@ public class UserService implements IUserService {
 	@Override
 	public User updateUserProfile(UserDto userDto, Long userId) {
 		if (!userRepository.existsById(userId)) {
-			throw new CustomException("there is no such user with Id: "+userId);
+			throw new CustomException("there is no such user with Id: " + userId);
 		}
 		Optional<User> user = userRepository.findById(userId);
+		user.get().setName(userDto.getName());
 		user.get().setUsername(userDto.getUserName());
-		user.get().setEmail(userDto.getEmail());
 		return userRepository.save(user.get());
 	}
 
 	@Override
 	public User deleteUserById(Long userId) {
-		if (! userRepository.existsById(userId)) {
-			throw new CustomException("there is no such user with Id: "+userId);
+		if (!userRepository.existsById(userId)) {
+			throw new CustomException("there is no such user with Id: " + userId);
 		}
 		Optional<User> user = userRepository.findById(userId);
 		userRepository.deleteById(userId);
@@ -54,8 +54,8 @@ public class UserService implements IUserService {
 
 	@Override
 	public User getUserById(Long userId) {
-		if (! userRepository.existsById(userId)) {
-			throw new CustomException("there is no such user with Id: "+userId);
+		if (!userRepository.existsById(userId)) {
+			throw new CustomException("there is no such user with Id: " + userId);
 		}
 		return userRepository.findById(userId).get();
 	}
@@ -63,7 +63,7 @@ public class UserService implements IUserService {
 	@Override
 	public User changeUserPassword(String password, Long userId) {
 		if (!userRepository.existsById(userId)) {
-			throw new CustomException("there is no such user with Id: "+userId);
+			throw new CustomException("there is no such user with Id: " + userId);
 		}
 		Optional<User> user = userRepository.findById(userId);
 		user.get().setPassword(password);
@@ -74,11 +74,10 @@ public class UserService implements IUserService {
 	public Boolean loginUser(String userName, String password) {
 		List<User> users = userRepository.findAll();
 		boolean validate = false;
-		users.stream().forEachOrdered(e -> {
-			if (e.getUsername().equals(userName) && e.getPassword().equals(password)) {
-				return;
-			}
-		});
+		for (User user : users) {
+			if (user.getUsername().equals(userName) && user.getPassword().equals(password))
+				validate = true;
+		}
 		return validate;
 	}
 

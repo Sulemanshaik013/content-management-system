@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,17 +33,17 @@ public class CommentController {
 	}
 
 	@PutMapping("/{commentId}")
-	public Comment updateComment(@RequestBody CommentDto commentDto, Long commentId) {
+	public Comment updateComment(@RequestBody CommentDto commentDto, @PathVariable Long commentId) {
 		return commentService.updateComment(commentDto, commentId);
 	}
 
 	@DeleteMapping("/{commentId}")
-	public Comment deleteComment(Long commentId) {
+	public Comment deleteComment(@PathVariable Long commentId) {
 		return commentService.deleteCommentByID(commentId);
 	}
 
 	@GetMapping("/{commentId}")
-	public Comment getCommentById(Long commentId) {
+	public Comment getCommentById(@PathVariable Long commentId) {
 		return commentService.getCommentById(commentId);
 	}
 
@@ -52,7 +53,7 @@ public class CommentController {
 	}
 
 	@GetMapping("/article/{articleId}")
-	public List<Comment> getCommentsByArticle(Long articleId) {
+	public List<Comment> getCommentsByArticle(@PathVariable Long articleId) {
 		return commentService.getCommentsByArticle(articleId);
 	}
 

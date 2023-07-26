@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,17 +34,17 @@ public class ArticleController {
 	}
 
 	@PutMapping("/{articleId}")
-	public Article updateArticle(@RequestBody ArticleDto article, Long articleId) {
+	public Article updateArticle(@RequestBody ArticleDto article, @PathVariable Long articleId) {
 		return articleService.updateArticle(article, articleId);
 	}
 
 	@DeleteMapping("/{articleId}")
-	public Article deleteArticle(Long articleId) {
+	public Article deleteArticle(@PathVariable Long articleId) {
 		return articleService.deleteArticleByID(articleId);
 	}
 
 	@GetMapping("/{articleId}")
-	public Article getArticle(Long articleId) {
+	public Article getArticle(@PathVariable Long articleId) {
 		return articleService.getArticleByID(articleId);
 	}
 
@@ -53,27 +54,27 @@ public class ArticleController {
 	}
 
 	@PostMapping("/{articleId}/publish")
-	public void publishArticle(Long articleId) {
+	public void publishArticle(@PathVariable Long articleId) {
 		articleService.publishArticle(articleId);
 	}
 
 	@PostMapping("/{articleId}/unpublish")
-	public void unpublishArticle(Long articleId) {
+	public void unpublishArticle(@PathVariable Long articleId) {
 		articleService.unpublishArticle(articleId);
 	}
 
-	@GetMapping("/{articleId}/published")
+	@GetMapping("/published")
 	public List<Article> getPublishedArticles() {
 		return articleService.getPublishedArticle();
 	}
 
-	@GetMapping("/{articleId}/drafts")
+	@GetMapping("/drafts")
 	public List<Article> getdratedArticle() {
 		return articleService.getdratedArticle();
 	}
 
 	@GetMapping("/category/{categoryId}")
-	public List<Article> getArticlesByCategory(Long categoryId) {
+	public List<Article> getArticlesByCategory(@PathVariable Long categoryId) {
 		return articleService.getArticlesByCategory(categoryId);
 	}
 

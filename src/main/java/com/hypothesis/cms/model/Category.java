@@ -15,7 +15,7 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, name = "category_name")
+	@Column(nullable = false, name = "category_name", unique = true)
 	private String categoryName;
 
 	public Long getId() {
@@ -33,5 +33,5 @@ public class Category {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-	
+
 }

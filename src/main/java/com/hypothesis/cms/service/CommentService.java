@@ -1,5 +1,6 @@
 package com.hypothesis.cms.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.hypothesis.cms.dto.CommentDto;
 import com.hypothesis.cms.exception.CustomException;
+import com.hypothesis.cms.exception.ResourceNotFoundException;
+import com.hypothesis.cms.model.Article;
 import com.hypothesis.cms.model.Comment;
+import com.hypothesis.cms.model.User;
 import com.hypothesis.cms.repository.ArticleRepository;
 import com.hypothesis.cms.repository.CommentRepository;
 import com.hypothesis.cms.repository.UserRepository;
@@ -27,34 +31,30 @@ public class CommentService implements ICommentService {
 	@Override
 	public Comment createComment(CommentDto commentDto) {
 		Comment comment = new Comment();
+		Article article = articleRepository.findById(commentDto.getArticleId()).orElseThrow(
+				() -> new ResourceNotFoundException("There is no such article with id :" + commentDto.getArticleId()));
+		User user = userRepository.findById(commentDto.getUserId()).orElseThrow(
+				() -> new ResourceNotFoundException("There is no such comment with id :" + commentDto.getUserId()));
 
-		if (!articleRepository.existsById(commentDto.getArticleId())) {
-			throw new CustomException("there is noo such article with id :" + commentDto.getArticleId());
-		}
-		if (!userRepository.existsById(commentDto.getUserId())) {
-			throw new CustomException("there is noo such user with id :" + commentDto.getUserId());
-		}
 		comment.setContent(commentDto.getContent());
-		comment.setArticle(articleRepository.findById(commentDto.getArticleId()).get());
-		comment.setUser(userRepository.findById(commentDto.getUserId()).get());
+		comment.setArticle(article);
+		comment.setUser(user);
+		comment.setTimestamp(new Date());
 
 		return commentRepository.save(comment);
 	}
 
 	@Override
 	public Comment updateComment(CommentDto commentDto, Long commentId) {
-		if (commentRepository.existsById(commentId)) {
-			throw new CustomException("there is noo such comment with id : " + commentId);
-		}
-		if (articleRepository.existsById(commentDto.getArticleId())) {
-			throw new CustomException("there is noo such article with id : " + commentDto.getArticleId());
-		}
-		if (userRepository.existsById(commentDto.getUserId())) {
-			throw new CustomException("there is noo such user with id : " + commentDto.getUserId());
-		}
+		Comment comment = commentRepository.findById(commentId)
+				.orElseThrow(() -> new ResourceNotFoundException("There is no such comment with id :" + commentId));
+		articleRepository.findById(commentDto.getArticleId()).orElseThrow(
+				() -> new ResourceNotFoundException("There is no such article with id :" + commentDto.getArticleId()));
+		userRepository.findById(commentDto.getUserId()).orElseThrow(
+				() -> new ResourceNotFoundException("There is no such comment with id :" + commentDto.getUserId()));
 
-		Comment comment = commentRepository.findById(commentId).get();
 		comment.setContent(commentDto.getContent());
+		comment.setTimestamp(new Date());
 
 		return commentRepository.save(comment);
 
@@ -62,21 +62,17 @@ public class CommentService implements ICommentService {
 
 	@Override
 	public Comment deleteCommentByID(Long commentId) {
-		if (commentRepository.existsById(commentId)) {
-			throw new CustomException("there is noo such comment with id : " + commentId);
-		}
+		Comment comment = commentRepository.findById(commentId)
+				.orElseThrow(() -> new CustomException("There is no such comment with id :" + commentId));
 
-		Comment comment = commentRepository.findById(commentId).get();
 		commentRepository.deleteById(commentId);
 		return comment;
 	}
 
 	@Override
 	public Comment getCommentById(Long commentId) {
-		if (commentRepository.existsById(commentId)) {
-			throw new CustomException("there is noo such comment with id : " + commentId);
-		}
-		return commentRepository.findById(commentId).get();
+		return commentRepository.findById(commentId)
+				.orElseThrow(() -> new ResourceNotFoundException("There is no such comment with id :" + commentId));
 	}
 
 	@Override
@@ -87,7 +83,7 @@ public class CommentService implements ICommentService {
 	@Override
 	public List<Comment> getCommentsByArticle(Long articleId) {
 		if (!commentRepository.existsById(articleId)) {
-			throw new CustomException("there is noo such article with id : " + articleId);
+			throw new ResourceNotFoundException("there is noo such article with id : " + articleId);
 		}
 
 		return commentRepository.findByArticleId(articleId);

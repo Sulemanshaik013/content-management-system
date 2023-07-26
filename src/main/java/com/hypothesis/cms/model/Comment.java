@@ -14,27 +14,31 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "comments")
 public class Comment {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id", nullable = false)
-    private Article article;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "article_id", nullable = false)
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
+	private Article article;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false, updatable = false)
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
+	private User user;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String content;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timestamp;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date timestamp;
 
 	public Long getId() {
 		return id;

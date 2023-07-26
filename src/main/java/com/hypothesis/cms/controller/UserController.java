@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,17 +40,17 @@ public class UserController {
 	}
 
 	@PutMapping("/update/{userId}")
-	public User updateUserProfile(@RequestBody UserDto userDto, String userId) {
+	public User updateUserProfile(@RequestBody UserDto userDto, @PathVariable String userId) {
 		return userService.updateUserProfile(userDto, Long.parseLong(userId));
 	}
 
 	@PatchMapping("/update/{userId}")
-	public User changeUserPassword(@RequestParam String password, Long userId) {
+	public User changeUserPassword(@RequestParam String password, @PathVariable Long userId) {
 		return userService.changeUserPassword(password, userId);
 	}
 
 	@GetMapping("/read/{userId}")
-	public User getUserById(Long userId) {
+	public User getUserById(@PathVariable Long userId) {
 		return userService.getUserById(userId);
 	}
 
@@ -59,7 +60,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/delete/{userId}")
-	public User deleteUser(Long userId) {
+	public User deleteUser(@PathVariable Long userId) {
 		return userService.deleteUserById(userId);
 	}
 

@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hypothesis.cms.dto.ArticleStatus;
 
 @Entity
@@ -23,28 +24,31 @@ import com.hypothesis.cms.dto.ArticleStatus;
 public class Article {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
+	@Column(nullable = false, unique = true)
+	private String title;
+
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String content;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false, updatable = false)
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
+	private User user;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date publicationDate;
+
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-    private String title;
+	private ArticleStatus status;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
-
-    @Column(nullable = false)
-    private String author;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date publicationDate;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ArticleStatus status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "category_id", nullable = false)
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
+	private Category category;
 
 	public Long getId() {
 		return id;
@@ -70,12 +74,12 @@ public class Article {
 		this.content = content;
 	}
 
-	public String getAuthor() {
-		return author;
+	public User getUser() {
+		return user;
 	}
 
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Date getPublicationDate() {
@@ -101,5 +105,5 @@ public class Article {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-        
+
 }

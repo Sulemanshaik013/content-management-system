@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hypothesis.cms.dto.CategoryDto;
-import com.hypothesis.cms.exception.CustomException;
+import com.hypothesis.cms.exception.ResourceNotFoundException;
 import com.hypothesis.cms.model.Category;
 import com.hypothesis.cms.repository.CategoryRepository;
 
@@ -27,7 +27,7 @@ public class CategoryService implements ICategoryService {
 	@Override
 	public Category updateCategory(CategoryDto categoryDto, Long categoryId) {
 		if (!categoryRepository.existsById(categoryId)) {
-			throw new CustomException("there is no such comment with id :" + categoryId);
+			throw new ResourceNotFoundException("there is no such comment with id :" + categoryId);
 		}
 		Optional<Category> category = categoryRepository.findById(categoryId);
 		category.get().setCategoryName(categoryDto.getName());
@@ -38,7 +38,7 @@ public class CategoryService implements ICategoryService {
 	@Override
 	public Category deleteCategoryByID(Long categoryId) {
 		if (!categoryRepository.existsById(categoryId)) {
-			throw new CustomException("there is no such comment with id :" + categoryId);
+			throw new ResourceNotFoundException("there is no such comment with id :" + categoryId);
 		}
 		Optional<Category> category = categoryRepository.findById(categoryId);
 		categoryRepository.deleteById(categoryId);
@@ -48,7 +48,7 @@ public class CategoryService implements ICategoryService {
 	@Override
 	public Category getCategoryById(Long categoryId) {
 		if (!categoryRepository.existsById(categoryId)) {
-			throw new CustomException("there is no such comment with id :" + categoryId);
+			throw new ResourceNotFoundException("there is no such comment with id :" + categoryId);
 		}
 		Optional<Category> category = categoryRepository.findById(categoryId);
 		return categoryRepository.save(category.get());
