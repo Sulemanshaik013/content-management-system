@@ -3,6 +3,8 @@ package com.hypothesis.cms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,58 +31,69 @@ public class ArticleController {
 	}
 
 	@PostMapping()
-	public Article createArticle(@RequestBody ArticleDto article) {
-		return articleService.createArticle(article);
+	public ResponseEntity<Article> createArticle(@RequestBody ArticleDto article) {
+		Article createdArticle = articleService.createArticle(article);
+		return new ResponseEntity<>(createdArticle, HttpStatus.OK);
 	}
 
 	@PutMapping("/{articleId}")
-	public Article updateArticle(@RequestBody ArticleDto article, @PathVariable Long articleId) {
-		return articleService.updateArticle(article, articleId);
+	public ResponseEntity<Article> updateArticle(@RequestBody ArticleDto article, @PathVariable Long articleId) {
+		Article updatedArticle = articleService.updateArticle(article, articleId);
+		return new ResponseEntity<>(updatedArticle, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{articleId}")
-	public Article deleteArticle(@PathVariable Long articleId) {
-		return articleService.deleteArticleByID(articleId);
+	public ResponseEntity<Article> deleteArticle(@PathVariable Long articleId) {
+		Article deleteArticleByID = articleService.deleteArticleByID(articleId);
+		return new ResponseEntity<>(deleteArticleByID, HttpStatus.OK);
 	}
 
 	@GetMapping("/{articleId}")
-	public Article getArticle(@PathVariable Long articleId) {
-		return articleService.getArticleByID(articleId);
+	public ResponseEntity<Article> getArticle(@PathVariable Long articleId) {
+		Article articleByID = articleService.getArticleByID(articleId);
+		return new ResponseEntity<>(articleByID, HttpStatus.OK);
 	}
 
 	@GetMapping()
-	public List<Article> getAllArticles() {
-		return articleService.getAllArticles();
+	public ResponseEntity<List<Article>> getAllArticles() {
+		List<Article> allArticles = articleService.getAllArticles();
+		return new ResponseEntity<>(allArticles, HttpStatus.OK);
 	}
 
 	@PostMapping("/{articleId}/publish")
-	public void publishArticle(@PathVariable Long articleId) {
+	public ResponseEntity<Void> publishArticle(@PathVariable Long articleId) {
 		articleService.publishArticle(articleId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping("/{articleId}/unpublish")
-	public void unpublishArticle(@PathVariable Long articleId) {
+	public ResponseEntity<Void> unpublishArticle(@PathVariable Long articleId) {
 		articleService.unpublishArticle(articleId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@GetMapping("/published")
-	public List<Article> getPublishedArticles() {
-		return articleService.getPublishedArticle();
+	public ResponseEntity<List<Article>> getPublishedArticles() {
+		List<Article> publishedArticles = articleService.getPublishedArticles();
+		return new ResponseEntity<>(publishedArticles, HttpStatus.OK);
 	}
 
 	@GetMapping("/drafts")
-	public List<Article> getdratedArticle() {
-		return articleService.getdratedArticle();
+	public ResponseEntity<List<Article>> getdratedArticles() {
+		List<Article> getdratedArticles = articleService.getdratedArticles();
+		return new ResponseEntity<>(getdratedArticles, HttpStatus.OK);
 	}
 
 	@GetMapping("/category/{categoryId}")
-	public List<Article> getArticlesByCategory(@PathVariable Long categoryId) {
-		return articleService.getArticlesByCategory(categoryId);
+	public ResponseEntity<List<Article>> getArticlesByCategory(@PathVariable Long categoryId) {
+		List<Article> articlesByCategory = articleService.getArticlesByCategory(categoryId);
+		return new ResponseEntity<>(articlesByCategory, HttpStatus.OK);
 	}
 
 	@GetMapping("/search")
-	public List<Article> searchArticleByKeyword(@RequestParam String keyword) {
-		return articleService.searchArticlesByKeyword(keyword);
+	public ResponseEntity<List<Article>> searchArticleByKeyword(@RequestParam String keyword) {
+		List<Article> searchArticlesByKeyword = articleService.searchArticlesByKeyword(keyword);
+		return new ResponseEntity<>(searchArticlesByKeyword, HttpStatus.OK);
 	}
 
 }

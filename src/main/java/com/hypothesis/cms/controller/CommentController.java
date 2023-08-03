@@ -3,6 +3,8 @@ package com.hypothesis.cms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,33 +30,39 @@ public class CommentController {
 	}
 
 	@PostMapping()
-	public Comment createComment(@RequestBody CommentDto commentDto) {
-		return commentService.createComment(commentDto);
+	public ResponseEntity<Comment> createComment(@RequestBody CommentDto commentDto) {
+		Comment createdComment = commentService.createComment(commentDto);
+		return new ResponseEntity<>(createdComment, HttpStatus.OK);
 	}
 
 	@PutMapping("/{commentId}")
-	public Comment updateComment(@RequestBody CommentDto commentDto, @PathVariable Long commentId) {
-		return commentService.updateComment(commentDto, commentId);
+	public ResponseEntity<Comment> updateComment(@RequestBody CommentDto commentDto, @PathVariable Long commentId) {
+		Comment updatedComment = commentService.updateComment(commentDto, commentId);
+		return new ResponseEntity<>(updatedComment, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{commentId}")
-	public Comment deleteComment(@PathVariable Long commentId) {
-		return commentService.deleteCommentByID(commentId);
+	public ResponseEntity<Comment> deleteComment(@PathVariable Long commentId) {
+		Comment deletedComment = commentService.deleteCommentByID(commentId);
+		return new ResponseEntity<>(deletedComment, HttpStatus.OK);
 	}
 
 	@GetMapping("/{commentId}")
-	public Comment getCommentById(@PathVariable Long commentId) {
-		return commentService.getCommentById(commentId);
+	public ResponseEntity<Comment> getCommentById(@PathVariable Long commentId) {
+		Comment comment = commentService.getCommentById(commentId);
+		return new ResponseEntity<>(comment, HttpStatus.OK);
 	}
 
 	@GetMapping()
-	public List<Comment> getAllComments() {
-		return commentService.getAllComments();
+	public ResponseEntity<List<Comment>> getAllComments() {
+		List<Comment> allComments = commentService.getAllComments();
+		return new ResponseEntity<>(allComments, HttpStatus.OK);
 	}
 
 	@GetMapping("/article/{articleId}")
-	public List<Comment> getCommentsByArticle(@PathVariable Long articleId) {
-		return commentService.getCommentsByArticle(articleId);
+	public ResponseEntity<List<Comment>> getCommentsByArticle(@PathVariable Long articleId) {
+		List<Comment> commentsByArticle = commentService.getCommentsByArticle(articleId);
+		return new ResponseEntity<>(commentsByArticle, HttpStatus.OK);
 	}
 
 }

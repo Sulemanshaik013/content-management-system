@@ -21,9 +21,9 @@ public interface IArticleService {
 
 	void unpublishArticle(Long articleId);
 
-	List<Article> getPublishedArticle();
+	List<Article> getPublishedArticles();
 
-	List<Article> getdratedArticle();
+	List<Article> getdratedArticles();
 
 	List<Article> getArticlesByCategory(Long categoryId);
 

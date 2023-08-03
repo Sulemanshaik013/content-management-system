@@ -3,6 +3,8 @@ package com.hypothesis.cms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,28 +30,33 @@ public class CategoryController {
 	}
 
 	@PostMapping()
-	public Category createCategory(@RequestBody CategoryDto categoryDto) {
-		return categoryService.createCategory(categoryDto);
+	public ResponseEntity<Category> createCategory(@RequestBody CategoryDto categoryDto) {
+		Category createdCategory = categoryService.createCategory(categoryDto);
+		return new ResponseEntity<>(createdCategory, HttpStatus.OK);
 	}
 
 	@PutMapping("/{categoryId}")
-	public Category updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Long categoryId) {
-		return categoryService.updateCategory(categoryDto, categoryId);
+	public ResponseEntity<Category> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Long categoryId) {
+		Category updatedCategory = categoryService.updateCategory(categoryDto, categoryId);
+		return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{categoryId}")
-	public Category deleteCategory(@PathVariable Long categoryId) {
-		return categoryService.deleteCategoryByID(categoryId);
+	public ResponseEntity<Category> deleteCategory(@PathVariable Long categoryId) {
+		Category deletedCategory = categoryService.deleteCategoryByID(categoryId);
+		return new ResponseEntity<>(deletedCategory, HttpStatus.OK);
 	}
 
 	@GetMapping("/{categoryId}")
-	public Category getCategoryById(@PathVariable Long categoryId) {
-		return categoryService.getCategoryById(categoryId);
+	public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
+		Category category = categoryService.getCategoryById(categoryId);
+		return new ResponseEntity<>(category, HttpStatus.OK);
 	}
 
 	@GetMapping()
-	public List<Category> getAllCategories() {
-		return categoryService.getAllCategories();
+	public ResponseEntity<List<Category>> getAllCategories() {
+		List<Category> allCategories = categoryService.getAllCategories();
+		return new ResponseEntity<>(allCategories, HttpStatus.OK);
 	}
 
 }

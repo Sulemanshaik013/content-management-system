@@ -104,12 +104,12 @@ public class ArticleService implements IArticleService {
 	}
 
 	@Override
-	public List<Article> getPublishedArticle() {
+	public List<Article> getPublishedArticles() {
 		return articleRepository.findByStatus(ArticleStatus.PUBLISHED);
 	}
 
 	@Override
-	public List<Article> getdratedArticle() {
+	public List<Article> getdratedArticles() {
 		return articleRepository.findByStatus(ArticleStatus.DRAFTED);
 	}
 

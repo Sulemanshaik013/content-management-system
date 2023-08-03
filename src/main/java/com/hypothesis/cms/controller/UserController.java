@@ -3,6 +3,8 @@ package com.hypothesis.cms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,38 +32,45 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public User registerUser(@RequestBody UserDto userDto) {
-		return userService.registerUser(userDto);
+	public ResponseEntity<User> registerUser(@RequestBody UserDto userDto) {
+		User registeredUser = userService.registerUser(userDto);
+		return new ResponseEntity<>(registeredUser, HttpStatus.OK);
 	}
 
 	@GetMapping("/login")
-	public Boolean loginUser(@RequestParam String userName, @RequestParam String password) {
-		return userService.loginUser(userName, password);
+	public ResponseEntity<Boolean> loginUser(@RequestParam String userName, @RequestParam String password) {
+		Boolean isValidUser = userService.loginUser(userName, password);
+		return new ResponseEntity<>(isValidUser, HttpStatus.OK);
 	}
 
 	@PutMapping("/update/{userId}")
-	public User updateUserProfile(@RequestBody UserDto userDto, @PathVariable String userId) {
-		return userService.updateUserProfile(userDto, Long.parseLong(userId));
+	public ResponseEntity<User> updateUserProfile(@RequestBody UserDto userDto, @PathVariable String userId) {
+		User updatedUser = userService.updateUserProfile(userDto, Long.parseLong(userId));
+		return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 	}
 
 	@PatchMapping("/update/{userId}")
-	public User changeUserPassword(@RequestParam String password, @PathVariable Long userId) {
-		return userService.changeUserPassword(password, userId);
+	public ResponseEntity<User> changeUserPassword(@RequestParam String password, @PathVariable Long userId) {
+		User updatedUser = userService.changeUserPassword(password, userId);
+		return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 	}
 
 	@GetMapping("/read/{userId}")
-	public User getUserById(@PathVariable Long userId) {
-		return userService.getUserById(userId);
+	public ResponseEntity<User> getUserById(@PathVariable Long userId) {
+		User user = userService.getUserById(userId);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@GetMapping("/read")
-	public List<User> getAllUsers() {
-		return userService.getAllUsers();
+	public ResponseEntity<List<User>> getAllUsers() {
+		List<User> allUsers = userService.getAllUsers();
+		return new ResponseEntity<>(allUsers, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{userId}")
-	public User deleteUser(@PathVariable Long userId) {
-		return userService.deleteUserById(userId);
+	public ResponseEntity<User> deleteUser(@PathVariable Long userId) {
+		User deletedUser = userService.deleteUserById(userId);
+		return new ResponseEntity<>(deletedUser, HttpStatus.OK);
 	}
 
 }
