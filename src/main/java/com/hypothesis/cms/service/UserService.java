@@ -10,6 +10,7 @@ import com.hypothesis.cms.dto.UserDto;
 import com.hypothesis.cms.exception.CustomException;
 import com.hypothesis.cms.model.User;
 import com.hypothesis.cms.repository.UserRepository;
+import com.hypothesis.cms.util.SecurityUtil;
 
 @Service
 public class UserService implements IUserService {
@@ -17,12 +18,15 @@ public class UserService implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private SecurityUtil securityUtil;
+
 	@Override
 	public User registerUser(UserDto userDto) {
 		User user = new User();
 		user.setName(userDto.getName());
 		user.setUsername(userDto.getUserName());
-		user.setPassword(userDto.getPassword());
+		user.setPassword(securityUtil.encrypt(userDto.getPassword()));
 		return userRepository.save(user);
 	}
 
@@ -32,8 +36,10 @@ public class UserService implements IUserService {
 			throw new CustomException("there is no such user with Id: " + userId);
 		}
 		Optional<User> user = userRepository.findById(userId);
-		user.get().setName(userDto.getName());
-		user.get().setUsername(userDto.getUserName());
+		if (userDto.getName() != null)
+			user.get().setName(userDto.getName());
+		if (userDto.getUserName() != null)
+			user.get().setUsername(userDto.getUserName());
 		return userRepository.save(user.get());
 	}
 
@@ -66,7 +72,7 @@ public class UserService implements IUserService {
 			throw new CustomException("there is no such user with Id: " + userId);
 		}
 		Optional<User> user = userRepository.findById(userId);
-		user.get().setPassword(password);
+		user.get().setPassword(securityUtil.encrypt(password));
 		return userRepository.save(user.get());
 	}
 
@@ -75,7 +81,7 @@ public class UserService implements IUserService {
 		List<User> users = userRepository.findAll();
 		boolean validate = false;
 		for (User user : users) {
-			if (user.getUsername().equals(userName) && user.getPassword().equals(password))
+			if (user.getUsername().equals(userName) && securityUtil.decrypt(user.getPassword()).equals(password))
 				validate = true;
 		}
 		return validate;

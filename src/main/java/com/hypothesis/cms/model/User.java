@@ -23,7 +23,7 @@ public class User {
 	@Email(message = "Please enter email")
 	private String username;
 
-	@Column(nullable = false, length = 8)
+	@Column(nullable = false)
 	private String password;
 
 	public Long getId() {
