@@ -1,7 +1,6 @@
 package com.hypothesis.cms.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,8 @@ import com.hypothesis.cms.util.SecurityUtil;
 
 @Service
 public class UserService implements IUserService {
+
+	private static final String NO_SUCH_USER_WITH_ID = "there is no such user with Id: ";
 
 	@Autowired
 	private UserRepository userRepository;
@@ -32,25 +33,23 @@ public class UserService implements IUserService {
 
 	@Override
 	public User updateUserProfile(UserDto userDto, Long userId) {
-		if (!userRepository.existsById(userId)) {
-			throw new CustomException("there is no such user with Id: " + userId);
-		}
-		Optional<User> user = userRepository.findById(userId);
+
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new CustomException(NO_SUCH_USER_WITH_ID + userId));
 		if (userDto.getName() != null)
-			user.get().setName(userDto.getName());
+			user.setName(userDto.getName());
 		if (userDto.getUserName() != null)
-			user.get().setUsername(userDto.getUserName());
-		return userRepository.save(user.get());
+			user.setUsername(userDto.getUserName());
+		return userRepository.save(user);
 	}
 
 	@Override
 	public User deleteUserById(Long userId) {
-		if (!userRepository.existsById(userId)) {
-			throw new CustomException("there is no such user with Id: " + userId);
-		}
-		Optional<User> user = userRepository.findById(userId);
+
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new CustomException(NO_SUCH_USER_WITH_ID + userId));
 		userRepository.deleteById(userId);
-		return user.get();
+		return user;
 	}
 
 	@Override
@@ -60,20 +59,16 @@ public class UserService implements IUserService {
 
 	@Override
 	public User getUserById(Long userId) {
-		if (!userRepository.existsById(userId)) {
-			throw new CustomException("there is no such user with Id: " + userId);
-		}
-		return userRepository.findById(userId).get();
+		return userRepository.findById(userId)
+				.orElseThrow(() -> new CustomException(NO_SUCH_USER_WITH_ID + userId));
 	}
 
 	@Override
 	public User changeUserPassword(String password, Long userId) {
-		if (!userRepository.existsById(userId)) {
-			throw new CustomException("there is no such user with Id: " + userId);
-		}
-		Optional<User> user = userRepository.findById(userId);
-		user.get().setPassword(securityUtil.encrypt(password));
-		return userRepository.save(user.get());
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new CustomException(NO_SUCH_USER_WITH_ID + userId));
+		user.setPassword(securityUtil.encrypt(password));
+		return userRepository.save(user);
 	}
 
 	@Override

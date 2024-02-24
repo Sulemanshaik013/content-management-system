@@ -1,8 +1,7 @@
 package com.hypothesis.cms.util;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -31,13 +30,12 @@ public class SecurityUtil {
 
 	public SecurityUtil() {
 		try {
-			arrayBytes = myEncryptionKey.getBytes("UTF8");
+			arrayBytes = myEncryptionKey.getBytes(StandardCharsets.UTF_8);
 			ks = new DESedeKeySpec(arrayBytes);
 			skf = SecretKeyFactory.getInstance("DESede");
 			cipher = Cipher.getInstance("DESede");
 			secretKey = skf.generateSecret(ks);
-			System.out.println(myEncryptionKey.length());
-		} catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException
+		} catch (NoSuchAlgorithmException | NoSuchPaddingException
 				| InvalidKeySpecException | InvalidKeyException e) {
 			e.printStackTrace();
 		}
@@ -54,8 +52,7 @@ public class SecurityUtil {
 			e.printStackTrace();
 		}
 		Base64.Encoder encoder = Base64.getEncoder();
-		String encryptedText = encoder.encodeToString(encryptedByte);
-		return encryptedText;
+		return encoder.encodeToString(encryptedByte);
 	}
 
 	public String decrypt(String encryptedText) {
@@ -68,8 +65,7 @@ public class SecurityUtil {
 		} catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
 			e.printStackTrace();
 		}
-		String decryptedText = new String(decryptedByte);
-		return decryptedText;
+		return new String(decryptedByte);
 	}
 
 }

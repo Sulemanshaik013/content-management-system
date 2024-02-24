@@ -2,7 +2,6 @@ package com.hypothesis.cms.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,8 @@ import com.hypothesis.cms.repository.UserRepository;
 @Service
 public class ArticleService implements IArticleService {
 
+	private static final String THERE_IS_NO_SUCH_ARTICLE_WITH_ID = "There is no such article with id :";
+	private static final String NO_SUCH_USER_FOUND_WITH_ID = "No such user found with id";
 	@Autowired
 	private ArticleRepository articleRepository;
 	@Autowired
@@ -29,16 +30,15 @@ public class ArticleService implements IArticleService {
 
 	@Override
 	public Article createArticle(ArticleDto articleDto) {
-		Optional<Category> category = Optional
-				.ofNullable(categoryRepository.findById(articleDto.getCategoryid()).orElseThrow(
-						() -> new ResourceNotFoundException("No such user found with id" + articleDto.getUserId())));
-		Optional<User> user = Optional.ofNullable(userRepository.findById(articleDto.getUserId()).orElseThrow(
-				() -> new ResourceNotFoundException("No such user found with id" + articleDto.getUserId())));
+		Category category = categoryRepository.findById(articleDto.getCategoryid()).orElseThrow(
+						() -> new ResourceNotFoundException(NO_SUCH_USER_FOUND_WITH_ID + articleDto.getUserId()));
+		User user = userRepository.findById(articleDto.getUserId()).orElseThrow(
+				() -> new ResourceNotFoundException(NO_SUCH_USER_FOUND_WITH_ID + articleDto.getUserId()));
 		Article article = new Article();
-		article.setUser(user.get());
+		article.setUser(user);
 		article.setTitle(articleDto.getTitle());
 		article.setContent(articleDto.getContent());
-		article.setCategory(category.get());
+		article.setCategory(category);
 		article.setPublicationDate(new Date());
 		article.setStatus(ArticleStatus.DRAFTED);
 		return articleRepository.save(article);
@@ -46,37 +46,37 @@ public class ArticleService implements IArticleService {
 
 	@Override
 	public Article updateArticle(ArticleDto articleDto, Long articleId) {
-		Optional<Article> article = Optional.ofNullable(articleRepository.findById(articleId)
-				.orElseThrow(() -> new ResourceNotFoundException("No such article with id :" + articleId)));
-		Optional<Category> category = Optional.ofNullable(
+		Article article = articleRepository.findById(articleId)
+				.orElseThrow(() -> new ResourceNotFoundException("No such article with id :" + articleId));
+		Category category = 
 				categoryRepository.findById(articleDto.getCategoryid()).orElseThrow(() -> new ResourceNotFoundException(
-						"No such Category with id :" + articleDto.getCategoryid())));
-		Optional<User> user = Optional.ofNullable(userRepository.findById(articleDto.getUserId()).orElseThrow(
-				() -> new ResourceNotFoundException("No such user found with id" + articleDto.getUserId())));
+						"No such Category with id :" + articleDto.getCategoryid()));
+		User user = userRepository.findById(articleDto.getUserId()).orElseThrow(
+				() -> new ResourceNotFoundException(NO_SUCH_USER_FOUND_WITH_ID + articleDto.getUserId()));
 
-		article.get().setUser(user.get());
-		article.get().setTitle(articleDto.getTitle());
-		article.get().setContent(articleDto.getContent());
-		article.get().setCategory(category.get());
-		article.get().setPublicationDate(new Date());
-		article.get().setStatus(ArticleStatus.DRAFTED);
+		article.setUser(user);
+		article.setTitle(articleDto.getTitle());
+		article.setContent(articleDto.getContent());
+		article.setCategory(category);
+		article.setPublicationDate(new Date());
+		article.setStatus(ArticleStatus.DRAFTED);
 
-		return articleRepository.save(article.get());
+		return articleRepository.save(article);
 	}
 
 	@Override
 	public Article deleteArticleByID(Long articleId) {
 
-		Optional<Article> article = Optional.ofNullable(articleRepository.findById(articleId)
-				.orElseThrow(() -> new ResourceNotFoundException("There is no such article with id :" + articleId)));
+		Article article = articleRepository.findById(articleId)
+				.orElseThrow(() -> new ResourceNotFoundException(THERE_IS_NO_SUCH_ARTICLE_WITH_ID + articleId));
 		articleRepository.deleteById(articleId);
-		return article.get();
+		return article;
 	}
 
 	@Override
 	public Article getArticleByID(Long articleId) {
 		return articleRepository.findById(articleId)
-				.orElseThrow(() -> new ResourceNotFoundException("There is no such article with id :" + articleId));
+				.orElseThrow(() -> new ResourceNotFoundException(THERE_IS_NO_SUCH_ARTICLE_WITH_ID + articleId));
 	}
 
 	@Override
@@ -86,20 +86,20 @@ public class ArticleService implements IArticleService {
 
 	@Override
 	public void publishArticle(Long articleId) {
-		Optional<Article> article = Optional.ofNullable(articleRepository.findById(articleId)
-				.orElseThrow(() -> new ResourceNotFoundException("There is no such article with id :" + articleId)));
+		Article article = articleRepository.findById(articleId)
+				.orElseThrow(() -> new ResourceNotFoundException(THERE_IS_NO_SUCH_ARTICLE_WITH_ID + articleId));
 
-		article.get().setStatus(ArticleStatus.PUBLISHED);
-		articleRepository.save(article.get());
+		article.setStatus(ArticleStatus.PUBLISHED);
+		articleRepository.save(article);
 	}
 
 	@Override
 	public void unpublishArticle(Long articleId) {
-		Optional<Article> article = Optional.ofNullable(articleRepository.findById(articleId)
-				.orElseThrow(() -> new ResourceNotFoundException("There is no such article with id :" + articleId)));
+		Article article = articleRepository.findById(articleId)
+				.orElseThrow(() -> new ResourceNotFoundException(THERE_IS_NO_SUCH_ARTICLE_WITH_ID + articleId));
 
-		article.get().setStatus(ArticleStatus.DRAFTED);
-		articleRepository.save(article.get());
+		article.setStatus(ArticleStatus.DRAFTED);
+		articleRepository.save(article);
 
 	}
 
